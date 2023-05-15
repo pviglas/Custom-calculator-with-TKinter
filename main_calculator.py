@@ -19,9 +19,9 @@ result = 'Αποτέλεσμα'
 radio_buttons = [("επιλογή 1", 10), ("επιλογή 2", 100), ("επιλογή 3", 1000), ("επιλογή 4", 0), ("επιλογή 5", 1)]
 
 # Constants
-sirma = 10      # y
-lamaki = 100    # z
-tserki = 1000   # k
+sirma = 10  # y
+lamaki = 100  # z
+tserki = 1000  # k
 
 
 def clean(entries):
@@ -34,12 +34,13 @@ def clean(entries):
 
 
 def calculate_price(entries):
-    orizonties_soustes = float(entries['Οριζόντιες σούστες'].get())     # a
-    kathetes_soustes = float(float(entries['Κάθετες σούστες'].get()))   # b
-    orizontia_diastasti = float(entries['Οριζόντια διάσταση'].get())    # c
-    katheti_diastasi = float(entries['Κάθετη διάσταση'].get())          # d
-    check_box_value = 1 - entries[check_boxes].get()    # if check box is enabled, then multiply by 0 should be applied
-    # check_box_value = 1 - check_box_value
+    orizonties_soustes = float(entries['Οριζόντιες σούστες'].get())  # a
+    kathetes_soustes = float(float(entries['Κάθετες σούστες'].get()))  # b
+    orizontia_diastasti = float(entries['Οριζόντια διάσταση'].get())  # c
+    katheti_diastasi = float(entries['Κάθετη διάσταση'].get())  # d
+
+    # if check box is enabled, then multiply by 0 should be applied
+    check_box_value = 1 - entries[check_boxes].get()        # check_box_value = 1 - check_box_value
 
     # calculation formula: a*b*x  + 2*(b-1)*c*y + (1 || 0)* [4*(c+d)*z + 4*(a+b)*k]
     calculation_1 = orizonties_soustes * kathetes_soustes * sousta_radio_button.get()
@@ -91,7 +92,8 @@ def create_form(root, fields):
     # Display radio buttons
     for radio_button, val in radio_buttons:
         row = CTkFrame(root, fg_color="#1A1A1A")
-        radio_button_field = CTkRadioButton(row, text=radio_button, variable=sousta_radio_button, value=val, font=comic_sans_ms_font)
+        radio_button_field = CTkRadioButton(row, text=radio_button, variable=sousta_radio_button, value=val,
+                                            font=comic_sans_ms_font)
 
         entries[radio_button] = val
 
@@ -118,6 +120,20 @@ def create_form(root, fields):
     return entries
 
 
+def show_constants():
+    top = CTkToplevel()
+    top.geometry("350x200")
+    top.title("Σταθερές")
+
+    sirma_str = 'Σύρμα: ' + str(sirma) + ' κιλά'
+    lamaki_str = '  Λαμάκι: ' + str(lamaki) + ' κιλά'
+    tserki_str = '   Τσέρκι: ' + str(tserki) + ' κιλά'
+
+    CTkLabel(top, width=22, text=sirma_str, font=comic_sans_ms_font).pack(pady=5)
+    CTkLabel(top, width=22, text=lamaki_str, font=comic_sans_ms_font).pack(pady=10)
+    CTkLabel(top, width=22, text=tserki_str, font=comic_sans_ms_font).pack(pady=12)
+
+
 def init_screen():
     inputs = create_form(screen, fields)
 
@@ -139,6 +155,15 @@ def init_screen():
                              hover=True, hover_color="#12D455",
                              command=(lambda e=inputs: clean(e)))
     clean_button.pack(side=LEFT, padx=15, pady=0)
+
+    constant_button = CTkButton(screen, text='Σταθερές', text_color="white",
+                                width=1,
+                                font=sans_serif_font,
+                                fg_color="#0ACA7E",
+                                corner_radius=15,
+                                hover=True, hover_color="#12D455",
+                                command=show_constants)
+    constant_button.pack(side=LEFT, padx=15, pady=0)
 
     exit_button = CTkButton(screen, text='Έξοδος', text_color="white",
                             width=1,
