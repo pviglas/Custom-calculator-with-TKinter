@@ -14,14 +14,14 @@ roboto_font = ("Roboto", 15, "bold")
 helvetica_font = ("Helvetica", 15, "bold")
 
 fields = ('Οριζόντιες σούστες', 'Κάθετες σούστες', 'Οριζόντια διάσταση', 'Κάθετη διάσταση')
-check_boxes = 'Tick box'
+check_boxes = 'Με λαμάκι'
 result = 'Αποτέλεσμα'
-radio_buttons = [("επιλογή 1", 10), ("επιλογή 2", 100), ("επιλογή 3", 1000), ("επιλογή 4", 0), ("επιλογή 5", 1)]
+radio_buttons = [("2.3", 0.0375), ("2.4", 0.0402), ("2.3 χαμηλό", 0.0325), ("2.4 χαμηλό", 0.036), ("Σουστάκι", 0.0235)]
 
 # Constants
-sirma = 10  # y
-lamaki = 100  # z
-tserki = 1000  # k
+sirma = 0.023718  # y
+lamaki = 0.13382  # z
+tserki = 0.0011494  # k
 
 
 def clean(entries):
@@ -40,7 +40,10 @@ def calculate_price(entries):
     katheti_diastasi = float(entries['Κάθετη διάσταση'].get())  # d
 
     # if check box is enabled, then multiply by 0 should be applied
-    check_box_value = 1 - entries[check_boxes].get()        # check_box_value = 1 - check_box_value
+    # check_box_value = 1 - entries[check_boxes].get()        # check_box_value = 1 - check_box_value
+
+    # if check box is enabled, then multiply by 1 should be applied
+    check_box_value = entries[check_boxes].get()
 
     # calculation formula: a*b*x  + 2*(b-1)*c*y + (1 || 0)* [4*(c+d)*z + 4*(a+b)*k]
     calculation_1 = orizonties_soustes * kathetes_soustes * sousta_radio_button.get()
@@ -60,7 +63,7 @@ def create_form(root, fields):
     entries = {}
 
     row = CTkFrame(root)
-    label = CTkLabel(row, width=42, text="Βρες μου έναν τίτλο", anchor='w', font=comic_sans_ms_font)
+    label = CTkLabel(row, width=42, text="Υπολογισμός τελάρων", anchor='w', font=comic_sans_ms_font)
     row.pack(side=TOP, fill=X, padx=10, pady=10)
     label.pack()
 
@@ -107,7 +110,7 @@ def create_form(root, fields):
     row = CTkFrame(root, fg_color="#1A1A1A")
     label = CTkLabel(row, width=22, text=result, anchor='w', font=comic_sans_ms_font)
 
-    entry = CTkEntry(row)
+    entry = CTkEntry(row, width=220)
     entry.insert(0, " ")
 
     row.pack(side=TOP, fill=X, padx=10, pady=15)
