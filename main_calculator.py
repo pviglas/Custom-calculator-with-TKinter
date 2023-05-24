@@ -16,8 +16,8 @@ helvetica_font = ("Helvetica", 15, "bold")
 # Field names
 orizonties_soustes_name = 'Οριζόντιες σούστες'
 kathetes_soustes_name = 'Κάθετες σούστες'
-orizontia_diastasti_name = 'Οριζόντια διάσταση (cm)'
-katheti_diastasi_name = 'Κάθετη διάσταση (cm)'
+orizontia_diastasti_name = 'Οριζόντια διάσταση (m)'
+katheti_diastasi_name = 'Κάθετη διάσταση (m)'
 fields = (orizonties_soustes_name, kathetes_soustes_name, orizontia_diastasti_name, katheti_diastasi_name)
 check_boxes = 'Με λαμάκι'
 result = 'Αποτέλεσμα'
