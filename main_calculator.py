@@ -1,3 +1,5 @@
+import tkinter
+
 import customtkinter
 from customtkinter import *
 
@@ -13,34 +15,38 @@ open_sans_font = ("Open Sans", 15, "bold")
 roboto_font = ("Roboto", 15, "bold")
 helvetica_font = ("Helvetica", 15, "bold")
 
-fields = ('Οριζόντιες σούστες', 'Κάθετες σούστες', 'Οριζόντια διάσταση', 'Κάθετη διάσταση')
+# Field names
+orizonties_soustes_name = 'Οριζόντιες σούστες'
+kathetes_soustes_name = 'Κάθετες σούστες'
+orizontia_diastasti_name = 'Οριζόντια διάσταση (cm)'
+katheti_diastasi_name = 'Κάθετη διάσταση (cm)'
+fields = (orizonties_soustes_name, kathetes_soustes_name, orizontia_diastasti_name, katheti_diastasi_name)
 check_boxes = 'Με λαμάκι'
 result = 'Αποτέλεσμα'
-radio_buttons = [("2.3", 0.0375), ("2.4", 0.0402), ("2.3 χαμηλό", 0.0325), ("2.4 χαμηλό", 0.036), ("Σουστάκι", 0.0235)]
+
+# Radio buttons name and values
+radio_buttons = [("2.30", 0.0375), ("2.40", 0.0402), ("2.30 χαμηλό", 0.0325), ("2.40 χαμηλό", 0.036), ("Σουστάκι", 0.0235)]
 
 # Constants
-sirma = 0.023718  # y
-lamaki = 0.13382  # z
-tserki = 0.0011494  # k
+sirma = 0.023718
+lamaki = 0.13382
+tserki = 0.0011494
 
 
-def clean(entries):
+def clear(entries):
     for field in fields:
         entries[field].delete(0, END)
-        entries[field].insert(0, ".!.")
+        entries[field].insert(0, "")
 
     entries[result].delete(0, END)
-    entries[result].insert(0, ".!.")
+    entries[result].insert(0, "")
 
 
-def calculate_price(entries):
-    orizonties_soustes = float(entries['Οριζόντιες σούστες'].get())  # a
-    kathetes_soustes = float(float(entries['Κάθετες σούστες'].get()))  # b
-    orizontia_diastasti = float(entries['Οριζόντια διάσταση'].get())  # c
-    katheti_diastasi = float(entries['Κάθετη διάσταση'].get())  # d
-
-    # if check box is enabled, then multiply by 0 should be applied
-    # check_box_value = 1 - entries[check_boxes].get()        # check_box_value = 1 - check_box_value
+def calculate(entries):
+    orizonties_soustes = float(entries[orizonties_soustes_name].get())
+    kathetes_soustes = float(entries[kathetes_soustes_name].get())
+    orizontia_diastasti = float(entries[orizontia_diastasti_name].get())
+    katheti_diastasi = float(entries[katheti_diastasi_name].get())
 
     # if check box is enabled, then multiply by 1 should be applied
     check_box_value = entries[check_boxes].get()
@@ -55,8 +61,23 @@ def calculate_price(entries):
     entries[result].delete(0, END)
     entries[result].insert(0, final_result)
 
+    # Print calculation in console
+    print("Calculation:"
+          " ({} * {} * {})"
+          " + [2 * ({} - 1) * {} * {}]"
+          " + [ {} * "
+          " [4 * ({} + {}) * {}]"
+          " + [4 * ({} + {}) * {}] ]"
+          .format(orizonties_soustes, kathetes_soustes, sousta_radio_button.get(),
+                  kathetes_soustes, orizontia_diastasti, sirma,
+                  check_box_value,
+                  orizontia_diastasti, katheti_diastasi, lamaki,
+                  orizonties_soustes, kathetes_soustes, tserki
+                  )
+          )
 
-def create_form(root, fields):
+
+def create_form(root):
     screen.geometry("600x600")
     screen.title("Antonopoulos bros")
 
@@ -84,6 +105,7 @@ def create_form(root, fields):
     # Display check box
     row = CTkFrame(root, fg_color="#1A1A1A")
     check_box_field = CTkCheckBox(row, text=check_boxes, font=comic_sans_ms_font)
+    check_box_field.select()    # enable check box by default
 
     entries[check_boxes] = check_box_field
 
@@ -125,20 +147,30 @@ def create_form(root, fields):
 
 def show_constants():
     top = CTkToplevel()
-    top.geometry("350x200")
+    top.geometry("350x300")
     top.title("Σταθερές")
 
-    sirma_str = 'Σύρμα: ' + str(sirma) + ' κιλά'
-    lamaki_str = '  Λαμάκι: ' + str(lamaki) + ' κιλά'
-    tserki_str = '   Τσέρκι: ' + str(tserki) + ' κιλά'
+    sirma_str = 'Σύρμα: {} κιλά'.format(sirma)
+    lamaki_str = '  Λαμάκι: {} κιλά'.format(lamaki)
+    tserki_str = '   Τσέρκι: {} κιλά'.format(tserki)
 
     CTkLabel(top, width=22, text=sirma_str, font=comic_sans_ms_font).pack(pady=5)
-    CTkLabel(top, width=22, text=lamaki_str, font=comic_sans_ms_font).pack(pady=10)
-    CTkLabel(top, width=22, text=tserki_str, font=comic_sans_ms_font).pack(pady=12)
+    CTkLabel(top, width=22, text=lamaki_str, font=comic_sans_ms_font).pack(pady=2)
+    CTkLabel(top, width=22, text=tserki_str, font=comic_sans_ms_font).pack(pady=2)
+
+    # row = CTkFrame(top)
+    # label = CTkLabel(row, width=42, text=" ", anchor='w')
+    # row.pack(side=TOP, fill=X, padx=15, pady=15)
+    # label.pack()
+
+    # Display radio buttons values
+    for radio_button, value in radio_buttons:
+        label_text = '> {}: {}'.format(radio_button, value)
+        CTkLabel(top, width=22, text=label_text, font=comic_sans_ms_font).pack(pady=1)
 
 
 def init_screen():
-    inputs = create_form(screen, fields)
+    inputs = create_form(screen)
 
     # Buttons
     calculate_button = CTkButton(screen, text='Υπολογισμός', text_color="white",
@@ -147,16 +179,16 @@ def init_screen():
                                  fg_color="#0ACA7E",
                                  corner_radius=15,
                                  hover=True, hover_color="#12D455",
-                                 command=(lambda e=inputs: calculate_price(e)))
+                                 command=(lambda e=inputs: calculate(e)))
     calculate_button.pack(side=LEFT, padx=15, pady=0)
 
-    clean_button = CTkButton(screen, text='Εκκαθαρισμός', text_color="white",
+    clean_button = CTkButton(screen, text='Καθαρισμός', text_color="white",
                              width=1,
                              font=sans_serif_font,
                              fg_color="#0ACA7E",
                              corner_radius=15,
                              hover=True, hover_color="#12D455",
-                             command=(lambda e=inputs: clean(e)))
+                             command=(lambda e=inputs: clear(e)))
     clean_button.pack(side=LEFT, padx=15, pady=0)
 
     constant_button = CTkButton(screen, text='Σταθερές', text_color="white",
@@ -180,7 +212,7 @@ def init_screen():
 
 if __name__ == '__main__':
     screen = CTk()
-    sousta_radio_button = IntVar()  # x
+    sousta_radio_button = DoubleVar()
     init_screen()
 
     screen.mainloop()
