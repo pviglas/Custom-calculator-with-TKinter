@@ -16,8 +16,8 @@ helvetica_font = ("Helvetica", 15, "bold")
 # Field names
 orizonties_soustes_name = 'Οριζόντιες σούστες'
 kathetes_soustes_name = 'Κάθετες σούστες'
-orizontia_diastasti_name = 'Οριζόντια διάσταση (m)'
-katheti_diastasi_name = 'Κάθετη διάσταση (m)'
+orizontia_diastasti_name = 'Οριζόντια διάσταση (cm)'
+katheti_diastasi_name = 'Κάθετη διάσταση (cm)'
 fields = (orizonties_soustes_name, kathetes_soustes_name, orizontia_diastasti_name, katheti_diastasi_name)
 check_boxes = 'Με λαμάκι'
 result = 'Αποτέλεσμα'
@@ -43,16 +43,16 @@ def clear(entries):
 def calculate(entries):
     orizonties_soustes = float(entries[orizonties_soustes_name].get())
     kathetes_soustes = float(entries[kathetes_soustes_name].get())
-    orizontia_diastasti = float(entries[orizontia_diastasti_name].get())
-    katheti_diastasi = float(entries[katheti_diastasi_name].get())
+    orizontia_diastasti_in_meters = float(entries[orizontia_diastasti_name].get()) / 100
+    katheti_diastasi_in_meters = float(entries[katheti_diastasi_name].get()) / 100
 
     # if check box is enabled, then multiply by 1 should be applied
     check_box_value = entries[check_boxes].get()
 
     # calculation formula: a*b*x  + 2*(b-1)*c*y + (1 || 0)* [4*(c+d)*z + 4*(a+b)*k]
     calculation_1 = orizonties_soustes * kathetes_soustes * sousta_radio_button.get()
-    calculation_2 = 2 * (kathetes_soustes - 1) * orizontia_diastasti * sirma
-    calculation_3 = 4 * (orizontia_diastasti + katheti_diastasi) * lamaki
+    calculation_2 = 2 * (kathetes_soustes - 1) * orizontia_diastasti_in_meters * sirma
+    calculation_3 = 4 * (orizontia_diastasti_in_meters + katheti_diastasi_in_meters) * lamaki
     calculation_4 = 4 * (orizonties_soustes + kathetes_soustes) * tserki
 
     final_result = calculation_1 + calculation_2 + (check_box_value * (calculation_3 + calculation_4))
@@ -67,9 +67,9 @@ def calculate(entries):
           " [4 * ({} + {}) * {}]"
           " + [4 * ({} + {}) * {}] ]"
           .format(orizonties_soustes, kathetes_soustes, sousta_radio_button.get(),
-                  kathetes_soustes, orizontia_diastasti, sirma,
+                  kathetes_soustes, orizontia_diastasti_in_meters, sirma,
                   check_box_value,
-                  orizontia_diastasti, katheti_diastasi, lamaki,
+                  orizontia_diastasti_in_meters, katheti_diastasi_in_meters, lamaki,
                   orizonties_soustes, kathetes_soustes, tserki
                   )
           )
@@ -91,7 +91,7 @@ def create_form(root):
         row = CTkFrame(root, fg_color="#1A1A1A")
         label = CTkLabel(row, width=22, text=field, anchor='w', font=comic_sans_ms_font)
         entry = CTkEntry(row)
-        entry.insert(0, "0")
+        entry.insert(0, "")
 
         row.pack(side=TOP, fill=X, padx=10, pady=5)
         label.pack(side=LEFT)
@@ -131,7 +131,7 @@ def create_form(root):
     label = CTkLabel(row, width=22, text=result, anchor='w', font=comic_sans_ms_font)
 
     entry = CTkEntry(row, width=220)
-    entry.insert(0, " ")
+    entry.insert(0, "")
 
     row.pack(side=TOP, fill=X, padx=10, pady=15)
     label.pack(side=LEFT)
@@ -158,7 +158,7 @@ def show_constants():
 
     # Display radio buttons values
     for radio_button, value in radio_buttons:
-        label_text = '> {}: {}'.format(radio_button, value)
+        label_text = '> {}: {} κιλά'.format(radio_button, value)
         CTkLabel(top, width=22, text=label_text, font=comic_sans_ms_font).pack(pady=1)
 
 
