@@ -1,5 +1,3 @@
-import tkinter
-
 import customtkinter
 from customtkinter import *
 
@@ -147,7 +145,7 @@ def create_form(root):
 
 def show_constants():
     top = CTkToplevel()
-    top.geometry("350x300")
+    top.geometry("350x280")
     top.title("Σταθερές")
 
     sirma_str = 'Σύρμα: {} κιλά'.format(sirma)
@@ -157,11 +155,6 @@ def show_constants():
     CTkLabel(top, width=22, text=sirma_str, font=comic_sans_ms_font).pack(pady=5)
     CTkLabel(top, width=22, text=lamaki_str, font=comic_sans_ms_font).pack(pady=2)
     CTkLabel(top, width=22, text=tserki_str, font=comic_sans_ms_font).pack(pady=2)
-
-    # row = CTkFrame(top)
-    # label = CTkLabel(row, width=42, text=" ", anchor='w')
-    # row.pack(side=TOP, fill=X, padx=15, pady=15)
-    # label.pack()
 
     # Display radio buttons values
     for radio_button, value in radio_buttons:
